@@ -1,0 +1,5 @@
+"0","write_csv(derli_anket)
+"
+"2","Error in write_delim(x, path, delim = "","", na = na, append = append, col_names = col_names,  : 
+  argument ""path"" is missing, with no default
+"

@@ -1,0 +1,16 @@
+"0","glimpse(anket)
+"
+"1","Observations: 101
+"
+"1","Variables: 5
+"
+"1","$ cinsiyet   [3m[90m<chr>[39m[23m ""Erkek"", ""Erkek"", ""Erkek"", ""Erkek"", ""ERKEK"", ""Erkek"", ""Erkek"", ""K"", ""K"", ""K…
+"
+"1","$ yaş_grubu  [3m[90m<chr>[39m[23m ""35 - 50"", ""25 - 35"", ""25 - 35"", ""18 - 25"", ""18 - 25"", ""18 - 25"", ""18 - 25""…
+"
+"1","$ sistem     [3m[90m<chr>[39m[23m ""IOS"", ""IOS"", ""IOS"", ""IOS"", ""Ios"", ""iphone"", ""IOS"", ""IOS"", ""ıOS"", ""IOS"", ""A…
+"
+"1","$ süre       [3m[90m<chr>[39m[23m ""2 saat"", ""1 saat"", ""4 saat"", ""2 saat"", ""1.5 saat"", ""2 saat"", ""2 saat"", ""1 …
+"
+"1","$ satın_alma [3m[90m<chr>[39m[23m ""Evet"", ""Hayır"", ""EVET"", ""EVET"", ""Hayır"", ""Hayır"", ""Hayır"", ""Evet"", ""Hayır""…
+"

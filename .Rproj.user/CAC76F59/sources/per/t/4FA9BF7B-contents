@@ -1,0 +1,167 @@
+---
+title: "R ile Veri Temizleme Pratiği "
+output: github_document
+---
+
+R ile Veri Temizleme Pratiği başlığı altındaki bu uygulama NewslabTurkey'de yayınlanan şu yazı için üretilmiştir. Bu pratikte kullanılan veri setine buradan ulaşabilirsiniz
+
+[**By Sadettin Demirel**](https://twitter.com/demirelsadettin)
+
+Veri temizleme, veri haberciliği süreçlerinde gazetecilerin en çok mesai harcadığı, zahmetli adımlardan bir tanesi. Günümüzde yapılandırılmış veri kaynakları giderek artıyor olsa da analize başlamadan önce veriyi yayınlandığı formattan (bkz: TÜİK) kurtarmak, ve derli hale getirmek gerekiyor.  Özellikle 7/24 haber akışı ve gazetecinin üzerindeki zaman baskısı düşünüldüğünde zaten zahmetli olan bu süreç daha da önemli hale geliyor. Bu noktada yapılan akademik araştırmalar da gazetecilerin veri haberciliği süreçlerinde en çok zamandan şikayet ettiğini doğruluyor. Fakat bu zahmetli süreci birkaç satır R koduyla kolaylaştırmak, zamandan tasarruf etmek mümkün. Peki nasıl? Bu yazıda R yazılımı ile dağınık verileri temizleme yollarını uygulamalı olarak anlatacağım. Kemerleri bağlayalım, sıkı bir yolculuk olacak :)
+
+#### 1.Teşhis koyalım
+
+ilk veri seti:
+
+* Veri setini açtığımda ilk gözüme takılan ilk satır boş ve değişkenler yerine başlık ve kısa bilgiler yer alıyor
+* Değişken isimleri düzenli değil, büyüklü küçüklü harfler ve noktalama işaretleri içeriyor.
+* Cinsiyet ve Satın Alma sütunlarına ait hücrelerde verilerde boşluklar var ve yine büyüklü küçüklü veriler görülüyor.
+* Ayrıca bazı durumlarda aynı şeyi ifade eden terimler birlikte kullanılmış (IOS / iPhone)
+* Bazı hücrelerde Kadın yerine K Erkek yerine E gibi kısaltmalar yer alıyor
+* Son olarak sayısal veri olması gereken saat metin verisi olarak yer alıyor.
+
+#### 2.Paketleri yükleyelim
+
+Daha önce yüklemiş olduğum için bu kısımda # işaretini kaldırarak devam ediniz.
+```{r message=FALSE, warning=FALSE, ,message=FALSE, paged.print=FALSE}
+# install.packages("readxl")
+# install.packages("tidyverse")
+# install.packages("lubridate")
+# install.packages("janitor")
+# install.packages("readr")
+```
+
+Paketleri yükledikten sonra **library** komutu ile çağırıyoruz. Aksi takdirde kullanacağımız kodlar çalışmayabilir.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library("readxl")
+library("tidyverse")
+library("skimr")
+library("janitor")
+library("readr")
+```
+
+#### 3.Dosyayı içeri aktaralım
+
+Veriyi doğrudan aktarabiliriz ama üst satırlar boş olduğu için R değişkenleri değer olarak algılıyor
+```{r message=FALSE, warning=TRUE}
+anket_kirli <- read_excel("~/downloads/örnek_veri.xls") #anket_kirli ismine tanımladık
+
+anket_kirli #tanımladığımız veriyi konsolda yazdırdık ve aşağıdaki veri setine ulaştık
+```
+
+3. Satırdaki değişken isimlerini değer olarak algıladı. Bu durumu düzeltmek için read_excel( ) fonksiyonunun “skip” argümanını kullanarak R’a gereksiz satırları atlamasını belirteceğiz.
+
+```{r echo=TRUE}
+anket_skip <- read_excel("~/downloads/örnek_veri.xls", skip = 4) #anket_skip ismine tanımladık
+
+anket_skip #tanımladığımız veriyi konsolda yazdırdık ve aşağıdaki veri setine ulaştık
+```
+
+Değişken isimleri acayip dağınık bir şekilde işlenmiş. Bunun üstesinden gelmek için veriyi R yazılımına aktarırken “col_names” argümanını kullanarak kendi değişken isimlerini değiştire biliriz. Ayrıca değerlerden önce yer alan boşlukları da *trim_ws* yani trim whitespace argümanıyla ortadan kaldırabiliriz  Nasıl?
+
+```{r}
+anket <- read_excel("~/downloads/örnek_veri.xls", skip = 5, col_names =c("cinsiyet","yaş_grubu","sistem","süre","satın_alma"), trim_ws = TRUE)
+
+anket
+```
+
+Fakat her veri 5 değişkenden (sütundan) ibaret değil. 50 değişkenden oluşan bir veri setiyle çalıştığımızı düşündüğümüzde 50 ayrı değişken ismini manuel olarak değiştirmek kabus gibi bir şey olurdu. Janitor paketini işte tam da bu yüzden bu pratiğe dahil ettik. Paketin clean_names() fonksiyonu bizi gereksiz ifadelerden kurtaracak, ayrıca Türkçe karakterler var ise onları İngilizce olarak değiştirecek
+
+```{r}
+anket_janitor <- read_excel("~/downloads/örnek_veri.xls", skip = 4)
+anket_janitor <- clean_names(anket_janitor)
+anket_janitor
+```
+
+Değişken isimlerini temizlediğimize göre şimdi daha derinlere inme zamanı. R'ın değişkenleri doğru tanımlaması bizim için çok önemli. O halde R'a veri setinin yapısını soralım. Bu noktada str() veya glimpse() gibi komutlar kullanabiliriz.
+```{r}
+str(anket)
+```
+```{r}
+glimpse(anket)
+```
+Her iki komut sonucunda da **cinsiyet** değişkeni *chr* yani metin verisi. Yaş grubu da aynı şekilde. Fakat **süre** değişkeni sayısal bir formatta değil, yani sayı verisi değil. Fakat daha büyük sorunlarımız var: Büyüklü küçüklü *EVET, Evet, Hayır, HAYIR* değerleri, kısaltmalar *E, K*, ve son olarak *IOS, iPhone, Apple ios* gibi ayni şeyi ifade eden farklı terimler. Excel'de bunları teşhis etmiş olsak da aynı şekilde görmek için R'da **count()** komutunu kullanabiliriz
+
+```{r}
+anket %>% count(cinsiyet)
+```
+
+```{r}
+anket %>% count(satın_alma)
+```
+
+```{r}
+anket %>% count(sistem)
+```
+
+Bu noktada ilk olarak **süre** verisini *parse_number* komutu ile metin verisinden sayı verisine dönüştüreceğiz. Sonrasında **anket** veri setindeki ifadeleri küçük harfli haline getireceğiz. Böylelikle kısaltmalar dışında temizleme işlemlerini tamamlamış olacağız. Bunu **stringr** paketinin **str_to_lower** komutu ve dplyr paketinin **mutate** fiiliyle gerçekleştireceğiz. Bu dpyr ve mutate nedir? diye merak edenleri daha önce newslabturkey'de yayınlanmış olan **veri manipülasyonu** yazımı öneriyorum.
+
+```{r}
+anket %>% mutate(süre = parse_number(süre),#metin verisinden sayıs verisine
+                  cinsiyet = str_to_lower(cinsiyet),#değerleri küçük harflere dönüştürme
+                  sistem = str_to_lower(sistem), 
+                  satın_alma = str_to_lower(satın_alma))
+
+anket_küçük <- anket %>% mutate(süre = parse_number(süre),
+                  cinsiyet = str_to_lower(cinsiyet), 
+                  sistem = str_to_lower(sistem), 
+                  satın_alma = str_to_lower(satın_alma))
+anket_küçük
+```
+
+#### 4.Değerleri yeniden kodlayalım
+
+Tabloda görüldüğü üzere tüm veri değerlerini küçük harfli hale getirdik. Geriye kısaltmalar kaldı. Aşağıda **count** komutuyla yaptığımız hesaplamaya göre kısaltmalar sadece **cinsiyet** ve **sistem** değişkenlerinde yer alıyor. O halde Excel'deki bul ve değiştir (find and replace) komutune benzer bir şekilde malum kısaltmaları veyahut benzer terimleri yeniden kodlayalım. 
+
+```{r}
+anket_küçük %>% count(cinsiyet)
+```
+
+```{r}
+anket_küçük %>% count(sistem)
+```
+
+Kodlama işlemini **mutate** ve **recode** fiileriyle gerçekleştireceğiz. Öncelikle en son tanımladığımız **anket_küçük** veri setini zincir operatörü ile **mutate** fiiline bağlıyoruz. Sonrasında yeniden kodlayacağımız değişken (**cinisyet**) ismini **recode( )** komutuna eşitliyoruz. Bundan sonraki adım çok önemli! **recode** komutu içerisine önce temizlenecek değişkenin ismi (*cinsiyet*), sonra tırnak içinde yeniden kodlanacak değeri(**e** ve **k**) istenilen ifadeye (**erkek** veya **kadın**) yine tırnak içinde tanımlıyoruz. Bu kadar!
+
+Basitçe açıklamak gerekirse R'a istediğimiz ifadeleri bulmasını ve yeniden kodlamasını(**recode**) etmesini belirtiyoruz.
+```{r}
+anket_küçük %>% 
+  mutate(cinsiyet = recode(cinsiyet, "e" = "erkek","k"="kadın"))
+```
+
+Yaptığımız işlemi  yeni bir isme tanımlamalıyız. Bunu **<-** sembolü ile aşağıda görüldüğü gibi yapabiliriz. Bunun nedeni bir sonraki aşamada **derli_anket** veri setini kullanarak sistem verisini yeniden kodlayacağız.
+
+```{r}
+derli_anket <-anket_küçük %>% 
+  mutate(cinsiyet = recode(cinsiyet, "e" = "erkek","k"="kadın"))
+```
+
+```{r}
+derli_anket %>% 
+  mutate(sistem = 
+           recode(sistem, "iphone"="ios", "apple" = "ios",
+                  "apple ios"="ios","ıos" ="ios",
+                  "huawei"="android","sony"="android"))
+```
+
+Son olarak yaptığımız işlemi **derli_anket** verisine tanımlayarak anket verimizi temizleme işlemini tamamlamış oluyoruz.
+
+```{r}
+derli_anket <- derli_anket %>% 
+  mutate(sistem = 
+           recode(sistem, "iphone"="ios", "apple" = "ios",
+                  "apple ios"="ios","ıos" ="ios",
+                  "huawei"="android","sony"="android"))
+
+#iki ayrı mutate() komutunu %>% zincir operatörü ile birbirne bağlayarak da aynı işlemi yapabilirdik.
+
+derli_anket
+```
+
+#### 5.Veri setini dışarı aktarma
+
+Temizlediğimiz veriyi dışarıya csv olarak aktarabiliriz. Bunu yapmak için öncelikle **readr** paketini çağıryoruz. Sonrasında **write_csv()** komutu içerisine önce veri seti ismi ("derli_anket"), sonrasında kaydedilecek klasörü dosyanın uzantısı ise belirtiyoruz.
+```{r}
+library(readr)
+write_csv(derli_anket, "~/desktop/derlianket.csv")
+```

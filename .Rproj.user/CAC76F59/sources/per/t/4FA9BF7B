@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1551474985165.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4122746031",
+    "id" : "4FA9BF7B",
+    "lastKnownWriteTime" : 1551548067,
+    "last_content_update" : 1551548316995,
+    "path" : "~/R/veri_temizleme_pratik/veri_temizleme_pratigi.Rmd",
+    "project_path" : "veri_temizleme_pratigi.Rmd",
+    "properties" : {
+        "cursorPosition" : "165,50",
+        "scrollLine" : "154"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

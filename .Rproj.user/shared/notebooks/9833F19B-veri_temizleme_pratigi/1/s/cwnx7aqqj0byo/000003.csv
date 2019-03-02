@@ -1,0 +1,8 @@
+"0","anket_janitor <- read_excel(""~/downloads/örnek_veri.xls"", sheet = 1, skip = 4)
+"
+"1",""
+"1","-"
+"1",""
+"1","/"
+"1","                                                                                               "
+"1",""
