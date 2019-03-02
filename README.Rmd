@@ -40,7 +40,7 @@ library("janitor")
 library("readr")
 ```
 
-#### 2.Dosyayı içeri aktaralım
+#### 3.Dosyayı içeri aktaralım
 
 Veriyi doğrudan aktarabiliriz ama üst satırlar boş olduğu için R değişkenleri değer olarak algılıyor
 ```{r message=FALSE, warning=TRUE}
@@ -94,7 +94,7 @@ anket %>% count(satın_alma)
 anket %>% count(sistem)
 ```
 
-Bu noktada ilk olarak yaş verisini *parse_number* komutu ile metin verisinden sayı verisine dönüştüreceğiz. Sonrasında **anket** veri setindeki ifadeleri küçük harfli haline getireceğiz. Böylelikle kısaltmalar dışında temizleme işlemlerini tamamlamış olacağız. Bunu **stringr** paketinin **str_to_lower** komutu ve dplyr paketinin **mutate** fiiliyle gerçekleştireceğiz. Bu dpyr ve mutate nedir? diye merak edenleri daha önce newslabturkey'de yayınlanmış olan **veri manipülasyonu** yazımı öneriyorum.
+Bu noktada ilk olarak **süre** verisini *parse_number* komutu ile metin verisinden sayı verisine dönüştüreceğiz. Sonrasında **anket** veri setindeki ifadeleri küçük harfli haline getireceğiz. Böylelikle kısaltmalar dışında temizleme işlemlerini tamamlamış olacağız. Bunu **stringr** paketinin **str_to_lower** komutu ve dplyr paketinin **mutate** fiiliyle gerçekleştireceğiz. Bu dpyr ve mutate nedir? diye merak edenleri daha önce newslabturkey'de yayınlanmış olan **veri manipülasyonu** yazımı öneriyorum.
 
 ```{r}
 anket %>% mutate(süre = parse_number(süre),#metin verisinden sayıs verisine
@@ -109,7 +109,7 @@ anket_küçük <- anket %>% mutate(süre = parse_number(süre),
 anket_küçük
 ```
 
-#### 3.Değerleri yeniden kodlayalım
+#### 4.Değerleri yeniden kodlayalım
 
 Tabloda görüldüğü üzere tüm veri değerlerini küçük harfli hale getirdik. Geriye kısaltmalar kaldı. Aşağıda **count** komutuyla yaptığımız hesaplamaya göre kısaltmalar sadece **cinsiyet** ve **sistem** değişkenlerinde yer alıyor. O halde Excel'deki bul ve değiştir (find and replace) komutune benzer bir şekilde malum kısaltmaları veyahut benzer terimleri yeniden kodlayalım. 
 
@@ -158,7 +158,7 @@ derli_anket <- derli_anket %>%
 derli_anket
 ```
 
-#### 4.Veri setini dışarı aktarma
+#### 5.Veri setini dışarı aktarma
 
 Temizlediğimiz veriyi dışarıya csv olarak aktarabiliriz. Bunu yapmak için öncelikle **readr** paketini çağıryoruz. Sonrasında **write_csv()** komutu içerisine önce veri seti ismi ("derli_anket"), sonrasında kaydedilecek klasörü dosyanın uzantısı ise belirtiyoruz.
 ```{r}
