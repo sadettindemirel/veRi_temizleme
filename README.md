@@ -1,7 +1,7 @@
 R ile Veri Temizleme Pratiği
 ================
 
-R ile Veri Temizleme Pratiği başlığı altındaki bu uygulama NewslabTurkey'de yayınlanan şu yazı için üretilmiştir. Bu pratikte kullanılan veri setine buradan ulaşabilirsiniz
+R ile Veri Temizleme Pratiği başlığı altındaki bu uygulama NewslabTurkey'de yayınlanan [R ekosisteminde dağınık veriler nasıl temizlenir?](https://www.newslabturkey.org/author/sadettindemirel/) yazısı için üretilmiştir. Bu pratikte kullanılan veri setine [buradan ulaşabilirsiniz](https://github.com/sadettindemirel/veRi_temizleme/blob/master/%C3%B6rnek_veri.xls)
 
 [**By Sadettin Demirel**](https://twitter.com/demirelsadettin)
 
