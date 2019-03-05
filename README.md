@@ -3,10 +3,6 @@ R ile Veri Temizleme Pratiği
 
 R ile Veri Temizleme Pratiği başlığı altındaki bu uygulama NewslabTurkey'de yayınlanan [R ekosisteminde dağınık veriler nasıl temizlenir?](https://www.newslabturkey.org/author/sadettindemirel/) yazısı için üretilmiştir. Bu pratikte kullanılan veri setine [buradan ulaşabilirsiniz](https://github.com/sadettindemirel/veRi_temizleme/blob/master/%C3%B6rnek_veri.xls)
 
-[**By Sadettin Demirel**](https://twitter.com/demirelsadettin)
-
-Veri temizleme, veri haberciliği süreçlerinde gazetecilerin en çok mesai harcadığı, zahmetli adımlardan bir tanesi. Günümüzde yapılandırılmış veri kaynakları giderek artıyor olsa da analize başlamadan önce veriyi yayınlandığı formattan (bkz: TÜİK) kurtarmak, ve derli hale getirmek gerekiyor. Özellikle 7/24 haber akışı ve gazetecinin üzerindeki zaman baskısı düşünüldüğünde zaten zahmetli olan bu süreç daha da önemli hale geliyor. Bu noktada yapılan akademik araştırmalar da gazetecilerin veri haberciliği süreçlerinde en çok zamandan şikayet ettiğini doğruluyor. Fakat bu zahmetli süreci birkaç satır R koduyla kolaylaştırmak, zamandan tasarruf etmek mümkün. Peki nasıl? Bu yazıda R yazılımı ile dağınık verileri temizleme yollarını uygulamalı olarak anlatacağım. Kemerleri bağlayalım, sıkı bir yolculuk olacak :)
-
 #### 1.Teşhis koyalım
 
 ilk veri seti:
@@ -376,3 +372,4 @@ Temizlediğimiz veriyi dışarıya csv olarak aktarabiliriz. Bunu yapmak için �
 library(readr)
 write_csv(derli_anket, "~/desktop/derlianket.csv")
 ```
+[**Temizlene veri seti için tıklayınız**] (https://github.com/sadettindemirel/veRi_temizleme/blob/master/derlianket.csv)
