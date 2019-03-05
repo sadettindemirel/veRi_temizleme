@@ -372,4 +372,4 @@ Temizlediğimiz veriyi dışarıya csv olarak aktarabiliriz. Bunu yapmak için �
 library(readr)
 write_csv(derli_anket, "~/desktop/derlianket.csv")
 ```
-[**Temizlene veri seti için tıklayınız**] (https://github.com/sadettindemirel/veRi_temizleme/blob/master/derlianket.csv)
+[Temizlene veri seti için tıklayınız] (https://github.com/sadettindemirel/veRi_temizleme/blob/master/derlianket.csv)
